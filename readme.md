@@ -1,32 +1,47 @@
-# Simple PHP Website
+# Simple PHP Website for Demo
 
-I put together this project while introducing a friend of mine to PHP. I decided to clean it up a bit and put it on Github so anyone new to PHP can have a taste of a **very simple and minimal** website built with PHP.
+## How to create a Dockerfile
 
-This project is meant for beginners. I've intentionally kept it minimal while introducing some [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).
+First Line: `FROM php:7.4-cli`
 
-## Installation
+The **FROM** instruction specifies the base image for the container, here we use **php:7.4-cli** docker image, which is official docker image for php, as the base image (it contains the php binary).
 
-There are only two steps to run this website:
+---
 
-1. Download the project to the desired directory on your computer
-2. Run  `php -S localhost:8080` on your terminal. Navigate to http://localhost:8080 to see the site.
+Second Line: `COPY . /usr/src/myapp`
 
-By defaut, the page URLs use query strings (*?page=about*). You need to have Apache installed for pretly URLs (*/about*) to work. To activate pretty urls, update config value of `pretty_uri` to `true`.
+The **COPY** instruction will copy all the files and folders in our current directory to the **/usr/src/myapp** directory in the container.
 
-## Concepts
+---
 
-The project covers these programming concepts:
+Third Line: `WORKDIR /usr/src/myapp`
 
- * Variables
- * Arrays
- * Functions
- * Pretty links *(/about) with fallback to query string (?page=about)*
- * Basic example of separation of concerns *(functionality, template, content)*
+The **WORKDIR** instruction sets the working directory in the container to **/usr/src/myapp**, i.e., whenever you exec into the container you will be present inside this directory.
 
-If you have any questions or recommendations for the project, please [create an issue](https://github.com/banago/simple-php-website/issues/new) or hit me up on Twitter [@banago](https://twitter.com/banago).
+---
 
-> To help you take your knowledge of PHP to the next level, I've personally hunt down what I deem to be the best introductory course on PHP out there. I wish this course existed when I started learing PHP. Check it out on Udemy: [PHP for Beginners Course](https://click.linksynergy.com/link?id=jTy10g8O/M8&offerid=507388.1576856&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fphp-for-beginners-%2F).
+Fourth Line: `CMD [ "php", "-S", "0.0.0.0:8080" ]`
 
-## License
+The `CMD` instruction runs the command passed to it (in our case **php -S 0.0.0.0:8080**) when the container starts. The command along with its arguments is specified in a json array.
 
-MIT
+---
+
+## Build the docker image
+
+```bash
+docker build -t app .
+```
+
+The build command is used to build a docker image from a dockerfile. We provide the name of the docker image to be built using the `-t` flag. `.` is used to specify the build context, i.e., where to look for the Dockerfile.
+
+## Run the docker image
+
+```bash
+docker run -d -p 8080:8080 app
+```
+
+The run command is used to run a container. `-d` flag is used to run the container in background. `-p` flag is used to map a host port to a port in the container, syntax - **<host_port>:<container_port>**. Finally we specify the name of the docker image to run.
+
+After running the command, go to `http://localhost:8080` to view the simple php website.
+
+<center><h1>THANK YOU!<h1><center>
