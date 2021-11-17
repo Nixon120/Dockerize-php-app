@@ -1,6 +1,6 @@
 # Simple PHP Website for Demo
 
-## How to create a Dockerfile
+## How to create a Dockerfile.
 
 First Line: `FROM php:7.4-cli`
 
